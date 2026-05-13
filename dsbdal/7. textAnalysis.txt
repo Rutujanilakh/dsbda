@@ -1,0 +1,44 @@
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk import pos_tag
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+nltk.download('punkt', quiet=True)
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
+nltk.download('punkt_tab') # Added to resolve LookupError
+nltk.download('averaged_perceptron_tagger_eng') # Added to resolve new LookupError
+
+text = "Text analytics is the process of analyzing text data to extract useful information."
+
+tokens = word_tokenize(text)
+print("Tokens:", tokens)
+
+pos_tags = pos_tag(tokens)
+print("POS Tags:", pos_tags)
+
+stop_words = set(stopwords.words('english'))
+filtered_tokens = [word for word in tokens if word.lower() not in stop_words]
+print("After Stopword Removal:", filtered_tokens)
+
+stemmer = PorterStemmer()
+stemmed_words = [stemmer.stem(word) for word in filtered_tokens]
+print("Stemmed Words:", stemmed_words)
+
+lemmatizer = WordNetLemmatizer()
+lemmatized_words = [lemmatizer.lemmatize(word) for word in filtered_tokens]
+print("Lemmatized Words:", lemmatized_words)
+
+documents = [text]
+
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(documents)
+
+print("TF-IDF Features:", vectorizer.get_feature_names_out())
+print("TF-IDF Matrix:\n", tfidf_matrix.toarray())
+

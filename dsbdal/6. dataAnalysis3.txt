@@ -1,0 +1,61 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix
+from sklearn.datasets import load_iris
+
+dataset = pd.read_csv("Iris.csv")
+
+if 'species' not in dataset.columns:
+    print("Warning: 'species' column not found in /content/Iris.csv. Loading Iris dataset from sklearn.datasets.")
+    iris = load_iris()
+    dataset = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+    dataset['species'] = iris.target_names[iris.target]
+
+X = dataset.drop("species", axis=1)   # Input Features
+y = dataset["species"]                # Output Target
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=0
+)
+
+model = GaussianNB()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+cm = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:\n", cm)
+
+unique_classes = sorted(y.unique())
+if len(unique_classes) > 1:
+    TP_class0 = cm[0][0]
+    FN_class0 = sum(cm[0, 1:]) # Sum of incorrect predictions for actual class 0
+    FP_class0 = sum(cm[1:, 0]) # Sum of incorrect predictions where class 0 was predicted
+    TN_class0 = cm.sum() - (TP_class0 + FN_class0 + FP_class0)
+
+    TP = TP_class0
+    FN = FN_class0
+    FP = FP_class0
+    TN = TN_class0
+else: 
+    TN = cm[0][0]
+    FP = cm[0][1]
+    FN = cm[1][0]
+    TP = cm[1][1]
+
+# Ensure no division by zero for precision/recall if (TP + FP) or (TP + FN) is zero
+accuracy = (TP + TN) / (TP + TN + FP + FN) if (TP + TN + FP + FN) != 0 else 0
+error_rate = (FP + FN) / (TP + TN + FP + FN) if (TP + TN + FP + FN) != 0 else 0
+precision = TP / (TP + FP) if (TP + FP) != 0 else 0
+recall = TP / (TP + FN) if (TP + FN) != 0 else 0
+
+print("\nTrue Positive (TP):", TP)
+print("True Negative (TN):", TN)
+print("False Positive (FP):", FP)
+print("False Negative (FN):", FN)
+
+print("\nAccuracy:", accuracy)
+print("Error Rate:", error_rate)
+print("Precision:", precision)
+print("Recall:", recall)

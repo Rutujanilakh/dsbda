@@ -1,0 +1,40 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df = sns.load_dataset('iris')
+
+sns.set(style="whitegrid")
+
+# Histograms
+
+features = df.columns[:-1]
+for col in features:
+    plt.figure(figsize=(6,4))
+    sns.histplot(df[col], kde=True, bins=20, color='skyblue')
+    plt.title(f"Distribution of {col}", fontsize=14)
+    plt.xlabel(col, fontsize=12)
+    plt.ylabel("Frequency", fontsize=12)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+for col in features:
+    plt.figure(figsize=(6,4))
+    sns.boxplot(x=df[col], color='lightgreen')
+    plt.title(f"Boxplot of {col}", fontsize=14)
+    plt.xlabel(col, fontsize=12)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+for col in features:
+    plt.figure(figsize=(6,4))
+    sns.boxplot(x='species', y=col, data=df, palette='Set2')
+    plt.title(f"{col} vs Species", fontsize=14)
+    plt.xlabel("Species", fontsize=12)
+    plt.ylabel(col, fontsize=12)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+

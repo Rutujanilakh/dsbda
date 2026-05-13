@@ -1,0 +1,54 @@
+import pandas as pd
+import numpy as np
+
+data = {
+'Name':['Amit','Ravi','Sita','Geeta','Rahul','Kiran','Anita','Vikas','Neha','Rohit'],
+'Department':['IT','HR','IT','HR','IT','Sales','Sales','HR','IT','Sales'],
+'Age':[22,25,23,26,24,27,28,29,23,26],
+'Income':[25000,30000,27000,32000,26000,35000,36000,34000,28000,33000]
+}
+
+df = pd.DataFrame(data)
+
+print("Dataset")
+print(df)
+
+grouped = df.groupby('Department')['Income']
+
+print("\nMean")
+print(grouped.mean())
+
+print("\nMedian")
+print(grouped.median())
+
+print("\nMinimum")
+print(grouped.min())
+
+print("\nMaximum")
+print(grouped.max())
+
+print("\nStandard Deviation")
+print(grouped.std())
+
+
+# 2 part
+
+import pandas as pd
+
+url = "https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.csv"
+
+iris = pd.read_csv(url)
+
+group = iris.groupby('species')
+
+print("\nMean")
+print(group.mean())
+
+print("\nStandard Deviation")
+print(group.std())
+
+print("\nPercentiles")
+for name,data in group:
+    print("\nSpecies:",name)
+    print(data.describe())
+

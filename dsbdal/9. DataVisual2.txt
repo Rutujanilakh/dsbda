@@ -1,0 +1,38 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+import pandas as pd
+
+titanic = sns.load_dataset('titanic')
+
+print("First 5 Rows of Dataset:")
+print(titanic.head())
+
+print("\nDataset Info:")
+print(titanic.info())
+
+print("\nSummary Statistics:")
+print(titanic.describe())
+
+titanic_clean = titanic.dropna(subset=['age']).copy()
+
+titanic_clean['survived'] = titanic_clean['survived'].map({
+    0: 'Not Survived',
+    1: 'Survived'
+})
+
+sns.set(style="whitegrid")
+
+plt.figure(figsize=(10, 7))
+sns.boxplot(
+    x='sex',
+    y='age',
+    hue='survived',
+    data=titanic_clean,
+    palette='Set2'
+)
+plt.title('Distribution of Age by Gender and Survival')
+plt.xlabel('Gender')
+plt.ylabel('Age')
+plt.legend(title='Survival Status')
+plt.show()
+

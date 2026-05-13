@@ -1,0 +1,32 @@
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv("StudentsPerformance.csv")
+
+print("First 5 Rows")
+print(df.head())
+
+print("\nMissing Values")
+print(df.isnull().sum())
+
+print("\nStatistics")
+print(df.describe())
+
+print("\nDataset Info")
+print(df.info())
+
+print("\nShape")
+print(df.shape)
+
+print("\nData Types")
+print(df.dtypes)
+
+df['gender'] = df['gender'].astype('category')
+
+df['math_normalized'] = (df['math score'] - df['math score'].min()) / (df['math score'].max() - df['math score'].min())
+
+df['gender_numeric'] = df['gender'].map({'male':1,'female':0})
+
+print("\nFinal Dataset")
+print(df.head())
+
